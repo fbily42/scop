@@ -6,7 +6,7 @@
 #    By: fbily <fbily@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/04 18:02:09 by fbily             #+#    #+#              #
-#    Updated: 2024/06/04 18:14:08 by fbily            ###   ########.fr        #
+#    Updated: 2024/06/25 17:37:38 by fbily            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,8 @@ CXXFLAGS = -Wall -Wextra -Werror -MMD -g3
 NAME = scop
 
 SRCS_DIR	=	srcs/
-SRCS_NAME	=	main.cpp			
+SRCS_NAME	=	main.cpp \
+				shaders.cpp		
 SRCS		=	$(addprefix $(SRCS_DIR), $(SRCS_NAME))
 
 OBJS_DIR	=	objs/
@@ -27,7 +28,7 @@ OBJS		= $(addprefix $(OBJS_DIR), $(OBJ))
 INC = -I./includes/
 DEPS		=	$(addprefix $(OBJS_DIR), $(SRCS_NAME:.cpp=.d))
 
-LIBS = -lGL -lglfw
+LIBS = -lGL -lglfw -lGLEW
 
 RM = rm -rf
 
