@@ -86,7 +86,8 @@ Mat4 Mat4::rotate(float angle, const Vec3& axis) {
 }
 
 Mat4 Mat4::perspective(float fov, float aspect, float near, float far) {
-    float tanHalfFov = std::tan(fov / 2);
+    float fovRad = fov * (M_PI / 180.0f);
+	float tanHalfFov = std::tan(fovRad / 2);
     std::array<std::array<float, 4>, 4> perspectiveMatrix = {{
         {1 / (aspect * tanHalfFov), 0, 0, 0},
         {0, 1 / tanHalfFov, 0, 0},
