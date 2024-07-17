@@ -1,5 +1,8 @@
 #include <iostream>
 #include "shaders.hpp"
+#include "mat4.hpp"
+#include "vec3.hpp"
+#include "vec4.hpp"
 
 int main() {
 
@@ -15,7 +18,7 @@ int main() {
 
 	// Open a window and create OpenGL context
 	GLFWwindow* window;
-	window = glfwCreateWindow(1024, 768, "Test 01", NULL, NULL);
+	window = glfwCreateWindow(1024, 768, "3D Triangle", NULL, NULL);
 	if (window == NULL) {
 		std::cerr << RED << "Failed to open GLFW window." << RESET << std::endl;
 		glfwTerminate();
@@ -24,6 +27,7 @@ int main() {
 	glfwMakeContextCurrent(window);
 
 	// Initialize GLEW
+	glewExperimental = true;
 	if (glewInit() != GLEW_OK) {
 		std::cerr << RED << "Failed to initialize GLEW." << RESET << std::endl;
 		glfwTerminate();
@@ -31,10 +35,35 @@ int main() {
 	}
 	glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE);
 
+	// Dark blue background
+	glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
+
 	// create a Vertex Array Object and set it as the current one
 	GLuint VertexArrayID;
 	glGenVertexArrays(1, &VertexArrayID);
 	glBindVertexArray(VertexArrayID);
+
+	// Compile and load shaders
+	GLuint programID = LoadShaders("./shaders/SimpleVertexShader.vertexshader", "./shaders/SimpleFragmentShader.fragmentshader");
+	
+	// Get a handle for our "MVP" uniform
+	GLuint MatrixID = glGetUniformLocation(programID, "MVP");
+
+	// Projection matrix : 45� Field of View, 4:3 ratio, display range : 0.1 unit <-> 100 units
+	Mat4 Projection = Mat4::perspective(45.0f, 4.0f / 3.0f, 0.1f, 100.0f);
+
+	// Camera Matrix
+	Mat4 View = Mat4::lookAt(
+		Vec3(4,3,3), // Camera is at (4,3,3) in World Space
+		Vec3(0,0,0), // Looks at the origin
+		Vec3(0,1,0) // Head is up
+	);
+
+	// Identity matrix for model
+	Mat4 Model;
+
+	//ModelViewProjection : multiplication of our 3 matrices
+	Mat4 MVP = Projection * View * Model;
 
 	// Our triangle vertexs
 	static const GLfloat g_vertex_buffer_data[] = {
@@ -48,8 +77,6 @@ int main() {
 	glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data), g_vertex_buffer_data, GL_STATIC_DRAW);
 
-	// Compile and load shaders
-	GLuint programID = LoadShaders("./shaders/SimpleVertexShader.vertexshader", "./shaders/SimpleFragmentShader.fragmentshader");
 	
 	while (glfwGetKey(window, GLFW_KEY_ESCAPE) != GLFW_PRESS && glfwWindowShouldClose(window) == 0) {
 
@@ -58,6 +85,9 @@ int main() {
 
 		// Use our shader
 		glUseProgram(programID);
+
+		// Send our transformation to the currently bound shader, in MVP uniform
+		glUniformMatrix4fv(MatrixID, 1, GL_FALSE, MVP.getFirstElement());
 
 		// Attribute buffer
 		glEnableVertexAttribArray(0);

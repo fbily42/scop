@@ -24,6 +24,8 @@ class Mat4
 		Mat4 operator*(const Mat4& rhs) const;
 		Vec4 operator*(const Vec4& rhs) const;
 
+		const float* getFirstElement() const;
+
 		static Mat4 translate(const Vec3& v);
 		static Mat4 rotate(float angle, const Vec3& axis);
 		static Mat4 scale(const Vec3& v);

@@ -37,6 +37,10 @@ Mat4 Mat4::operator*(const Mat4& rhs) const {
 	return result;
 }
 
+const float* Mat4::getFirstElement() const {
+	return &this->_m[0][0];
+}
+
 Vec4 Mat4::operator*(const Vec4& rhs) const {
 	return Vec4(
 		_m[0][0] * rhs.getX() + _m[0][1] * rhs.getY() + _m[0][2] * rhs.getZ() + _m[0][3] * rhs.getW(),

@@ -6,7 +6,7 @@
 #    By: fbily <fbily@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/04 18:02:09 by fbily             #+#    #+#              #
-#    Updated: 2024/06/28 18:08:41 by fbily            ###   ########.fr        #
+#    Updated: 2024/07/17 16:26:42 by fbily            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,6 +21,7 @@ SRCS_NAME	=	main.cpp \
 				shaders.cpp \
 				vec3.cpp \
 				vec4.cpp \
+				mat4.cpp \
 				
 SRCS		=	$(addprefix $(SRCS_DIR), $(SRCS_NAME))
 
