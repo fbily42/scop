@@ -15,7 +15,7 @@ class Mat4
 
 	public:
 
-		Mat4();
+		Mat4(); // Identity matrix
 		Mat4(const std::array<std::array<float, 4>, 4>& m);
 		Mat4(const Mat4 &obj);
 		~Mat4();
@@ -25,7 +25,7 @@ class Mat4
 		Vec4 operator*(const Vec4& rhs) const;
 
 		static Mat4 translate(const Vec3& v);
-		static Mat4 rotate(float angle, const Vec4& axis);
+		static Mat4 rotate(float angle, const Vec3& axis);
 		static Mat4 scale(const Vec3& v);
 		static Mat4 perspective(float fov, float aspect, float near, float far);
 
