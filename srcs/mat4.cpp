@@ -91,3 +91,32 @@ Mat4 Mat4::perspective(float fov, float aspect, float near, float far) {
     }};
 	return Mat4(perspectiveMatrix);
 }
+
+Mat4 Mat4::lookAt(const Vec3& eye, const Vec3& center, const Vec3& up) {
+    Vec3 f = (center - eye).normalize();
+    Vec3 s = f.cross(up).normalize();
+    Vec3 u = s.cross(f);
+
+    Mat4 result = Mat4(); // Initialize with identity matrix
+    result._m[0][0] = s.getX();
+    result._m[0][1] = s.getY();
+    result._m[0][2] = s.getZ();
+    result._m[0][3] = -s.dot(eye);
+
+    result._m[1][0] = u.getX();
+    result._m[1][1] = u.getY();
+    result._m[1][2] = u.getZ();
+    result._m[1][3] = -u.dot(eye);
+
+    result._m[2][0] = -f.getX();
+    result._m[2][1] = -f.getY();
+    result._m[2][2] = -f.getZ();
+    result._m[2][3] = f.dot(eye);
+
+    result._m[3][0] = 0;
+    result._m[3][1] = 0;
+    result._m[3][2] = 0;
+    result._m[3][3] = 1;
+
+    return result;
+}
