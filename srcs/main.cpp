@@ -49,7 +49,7 @@ int main() {
 	// Get a handle for our "MVP" uniform
 	GLuint MatrixID = glGetUniformLocation(programID, "MVP");
 
-	// Projection matrix : 45� Field of View, 4:3 ratio, display range : 0.1 unit <-> 100 units
+	// Projection matrix : 45 Field of View, 4:3 ratio, display range : 0.1 unit <-> 100 units
 	Mat4 Projection = Mat4::perspective(45.0f, 4.0f / 3.0f, 0.1f, 100.0f);
 
 	// Camera Matrix
@@ -63,6 +63,7 @@ int main() {
 	Mat4 Model;
 
 	//ModelViewProjection : multiplication of our 3 matrices
+	// Mat4 MVP = Projection * View * Model;
 	Mat4 MVP = Projection * View * Model;
 
 	// Our triangle vertexs

@@ -87,20 +87,30 @@ Mat4 Mat4::rotate(float angle, const Vec3& axis) {
 
 Mat4 Mat4::perspective(float fov, float aspect, float near, float far) {
     float fovRad = fov * (M_PI / 180.0f);
-	float tanHalfFov = std::tan(fovRad / 2);
-    std::array<std::array<float, 4>, 4> perspectiveMatrix = {{
-        {1 / (aspect * tanHalfFov), 0, 0, 0},
-        {0, 1 / tanHalfFov, 0, 0},
-        {0, 0, -(far + near) / (far - near), -2 * far * near / (far - near)},
-        {0, 0, -1, 0}
+	float tanHalfFov = std::tan(fovRad / 2.0f);
+    // std::array<std::array<float, 4>, 4> perspectiveMatrix = {{
+    //     {1.0f / (aspect * tanHalfFov), 0, 0, 0},
+    //     {0, 1.0f / tanHalfFov, 0, 0},
+    //     {0, 0, -(far + near) / (far - near), -2 * far * near / (far - near)},
+    //     {0, 0, -1, 0}
+    // }};
+	std::array<std::array<float, 4>, 4> perspectiveMatrix = {{
+        {1.0f / (aspect * tanHalfFov), 0, 0, 0},
+        {0, 1.0f / tanHalfFov, 0, 0},
+        {0, 0, -(far + near) / (far - near), -1.0f},
+        {0, 0, -(2.0f * far * near) / (far - near), 0}
     }};
 	return Mat4(perspectiveMatrix);
 }
 
 Mat4 Mat4::lookAt(const Vec3& eye, const Vec3& center, const Vec3& up) {
-    Vec3 f = (center - eye).normalize();
-    Vec3 s = f.cross(up).normalize();
-    Vec3 u = s.cross(f);
+    // Vec3 f = (center - eye).normalize();
+    // Vec3 s = f.cross(up).normalize();
+    // Vec3 u = s.cross(f);
+	Vec3 f = (center - eye).normalize();
+	Vec3 u = up.normalize();
+	Vec3 s = f.cross(u).normalize();
+	u = s.cross(f);
 
     Mat4 result = Mat4(); // Initialize with identity matrix
     result._m[0][0] = s.getX();
