@@ -24,6 +24,10 @@ Mat4& Mat4::operator=(const Mat4& rhs) {
 	return *this;
 }
 
+const float* Mat4::getFirstElement() const {
+	return &this->_m[0][0];
+}
+
 Mat4 Mat4::operator*(const Mat4& rhs) const {
 	Mat4 result;
 	for (int i = 0; i < 4; i++) {
@@ -35,10 +39,6 @@ Mat4 Mat4::operator*(const Mat4& rhs) const {
 		}
 	}
 	return result;
-}
-
-const float* Mat4::getFirstElement() const {
-	return &this->_m[0][0];
 }
 
 Vec4 Mat4::operator*(const Vec4& rhs) const {
@@ -104,34 +104,27 @@ Mat4 Mat4::perspective(float fov, float aspect, float near, float far) {
 }
 
 Mat4 Mat4::lookAt(const Vec3& eye, const Vec3& center, const Vec3& up) {
-    // Vec3 f = (center - eye).normalize();
-    // Vec3 s = f.cross(up).normalize();
-    // Vec3 u = s.cross(f);
-	Vec3 f = (center - eye).normalize();
-	Vec3 u = up.normalize();
-	Vec3 s = f.cross(u).normalize();
-	u = s.cross(f);
+    Vec3 f = (center - eye).normalize();
+    Vec3 s = f.cross(up).normalize();
+    Vec3 u = s.cross(f);
 
-    Mat4 result = Mat4(); // Initialize with identity matrix
+    Mat4 result = Mat4();
+
     result._m[0][0] = s.getX();
-    result._m[0][1] = s.getY();
-    result._m[0][2] = s.getZ();
-    result._m[0][3] = -s.dot(eye);
+    result._m[1][0] = s.getY();
+    result._m[2][0] = s.getZ();
 
-    result._m[1][0] = u.getX();
+    result._m[0][1] = u.getX();
     result._m[1][1] = u.getY();
-    result._m[1][2] = u.getZ();
-    result._m[1][3] = -u.dot(eye);
+    result._m[2][1] = u.getZ();
 
-    result._m[2][0] = -f.getX();
-    result._m[2][1] = -f.getY();
+    result._m[0][2] = -f.getX();
+    result._m[1][2] = -f.getY();
     result._m[2][2] = -f.getZ();
-    result._m[2][3] = f.dot(eye);
 
-    result._m[3][0] = 0;
-    result._m[3][1] = 0;
-    result._m[3][2] = 0;
-    result._m[3][3] = 1;
+    result._m[3][0] = -s.dot(eye);
+    result._m[3][1] = -u.dot(eye);
+    result._m[3][2] = f.dot(eye);
 
     return result;
 }

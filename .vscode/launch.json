@@ -1,0 +1,24 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug My Program",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/scop", // Path to your compiled executable
+            "cwd": "${workspaceFolder}",
+            "stopAtEntry": false,
+            "preLaunchTask": "build",
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "miDebuggerPath": "/usr/bin/gdb", // Adjust this if necessary
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ],
+        }
+    ]
+}
