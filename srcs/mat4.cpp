@@ -34,7 +34,7 @@ Mat4 Mat4::operator*(const Mat4& rhs) const {
 		for (int j = 0; j < 4; j++) {
 			result._m[i][j] = 0;
 			for (int k = 0; k < 4; k++) {
-				result._m[i][j] += _m[i][k] * rhs._m[k][j];
+				result._m[i][j] += rhs._m[i][k] * _m[k][j];
 			}
 		}
 	}

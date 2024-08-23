@@ -6,7 +6,7 @@
 #    By: fbily <fbily@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/04 18:02:09 by fbily             #+#    #+#              #
-#    Updated: 2024/08/22 16:05:26 by fbily            ###   ########.fr        #
+#    Updated: 2024/08/23 14:36:49 by fbily            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,7 @@ CXXFLAGS = -Wall -Wextra -Werror -MMD -g3
 NAME = scop
 
 SRCS_DIR	=	srcs/
-SRCS_NAME	=	mainGLM.cpp \
+SRCS_NAME	=	main.cpp \
 				shaders.cpp \
 				vec3.cpp \
 				vec4.cpp \

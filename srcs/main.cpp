@@ -63,7 +63,6 @@ int main() {
 	Mat4 Model;
 
 	//ModelViewProjection : multiplication of our 3 matrices
-	// Mat4 MVP = Projection * View * Model;
 	Mat4 MVP = Projection * View * Model;
 
 	// Our triangle vertexs
