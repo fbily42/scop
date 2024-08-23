@@ -19,7 +19,7 @@ int main() {
 
 	// Open a window and create OpenGL context
 	GLFWwindow* window;
-	window = glfwCreateWindow(1024, 768, "3D Triangle", NULL, NULL);
+	window = glfwCreateWindow(1024, 768, "Scop", NULL, NULL);
 	if (window == NULL) {
 		std::cerr << RED << "Failed to open GLFW window." << RESET << std::endl;
 		glfwTerminate();
@@ -36,6 +36,13 @@ int main() {
 	}
 	glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE);
 
+	// Hide cursor
+	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+
+	// Set cursor in the middle of the screen
+	glfwPollEvents();
+	glfwSetCursorPos(window, 1024/2, 768/2);
+
 	// Dark blue background
 	glClearColor(0.0f, 0.0f, 0.4f, 0.0f);
 
@@ -43,6 +50,9 @@ int main() {
 	glEnable(GL_DEPTH_TEST);
 	// Accept fragment if it is closer to the camera than the former one
 	glDepthFunc(GL_LESS);
+
+	// Cull triangles which normal is not towards the camera
+	glEnable(GL_CULL_FACE);
 
 	// create a Vertex Array Object and set it as the current one
 	GLuint VertexArrayID;
@@ -176,6 +186,7 @@ int main() {
 		// Draw the triangle
 		glDrawArrays(GL_TRIANGLES, 0, 12*3);
 		glDisableVertexAttribArray(0);
+		glDisableVertexAttribArray(1);
 
 		// Swap buffers
 		glfwSwapBuffers(window);
@@ -185,6 +196,7 @@ int main() {
 	// Cleanup
 	glfwDestroyWindow(window);
 	glDeleteBuffers(1, &vertexbuffer);
+	glDeleteBuffers(1, &colorbuffer);
 	glDeleteVertexArrays(1, &VertexArrayID);
 	glDeleteProgram(programID);
 
