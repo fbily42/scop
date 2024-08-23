@@ -56,6 +56,20 @@ Vec3 Vec3::operator*(float scalar) const {
 	return (Vec3(_x * scalar, _y * scalar, _z * scalar));
 }
 
+Vec3& Vec3::operator+=(const Vec3& rhs) {
+	_x += rhs._x;
+	_y += rhs._y;
+	_z += rhs._z;
+	return *this;
+}
+
+Vec3& Vec3::operator-=(const Vec3& rhs) {
+	_x -= rhs._x;
+	_y -= rhs._y;
+	_z -= rhs._z;
+	return *this;
+}
+
 std::ostream& Vec3::operator<<(std::ostream& os) const {
 	os << "(" << _x << ", " << _y << ", " << _z << ")";
 	return os;
