@@ -6,7 +6,7 @@
 #    By: fbily <fbily@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/04 18:02:09 by fbily             #+#    #+#              #
-#    Updated: 2024/08/23 16:19:08 by fbily            ###   ########.fr        #
+#    Updated: 2024/08/23 18:28:57 by fbily            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,10 +19,12 @@ NAME = scop
 SRCS_DIR	=	srcs/
 SRCS_NAME	=	main.cpp \
 				shaders.cpp \
+				vec2.cpp \
 				vec3.cpp \
 				vec4.cpp \
 				mat4.cpp \
 				controls.cpp \
+				objLoader.cpp \
 				
 SRCS		=	$(addprefix $(SRCS_DIR), $(SRCS_NAME))
 

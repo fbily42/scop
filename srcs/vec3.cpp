@@ -57,16 +57,16 @@ Vec3 Vec3::operator*(float scalar) const {
 }
 
 Vec3& Vec3::operator+=(const Vec3& rhs) {
-	_x += rhs._x;
-	_y += rhs._y;
-	_z += rhs._z;
+	this->_x += rhs._x;
+	this->_y += rhs._y;
+	this->_z += rhs._z;
 	return *this;
 }
 
 Vec3& Vec3::operator-=(const Vec3& rhs) {
-	_x -= rhs._x;
-	_y -= rhs._y;
-	_z -= rhs._z;
+	this->_x -= rhs._x;
+	this->_y -= rhs._y;
+	this->_z -= rhs._z;
 	return *this;
 }
 
