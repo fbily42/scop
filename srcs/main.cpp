@@ -6,13 +6,9 @@
 #include "vec4.hpp"
 #include "controls.hpp"
 #include "objLoader.hpp"
-#include "colordata.hpp"
-#include <cstdlib>
-#include <ctime>
+#include <random>
 
 int main() {
-
-	std::srand(static_cast<unsigned int>(std::time(nullptr)));
 
 	// Initialize GLFW
 	if (!glfwInit()) {
@@ -78,20 +74,22 @@ int main() {
 	std::vector<Vec3> vertices;
 	std::vector<Vec2> uvs;
 	std::vector<Vec3> normals;
-	loadOBJ("./3DObj/42.obj", vertices, uvs, normals);
+	loadOBJ("./3DObj/teapot.obj", vertices, uvs, normals);
 
 	GLuint vertexbuffer;
 	glGenBuffers(1, &vertexbuffer);
 	glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
 	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(Vec3), &vertices[0], GL_STATIC_DRAW);
 
+	// Generate random colors
 	GLfloat g_color_buffer_data[vertices.size() * 3];
-	int numColors = sizeof(colorData) / sizeof(colorData[0] / 3);
+	std::random_device rd;
+	std::mt19937 gen(rd());
+	std::uniform_real_distribution<float> dis(0.2f, 0.9f);
 	for (unsigned int v = 0; v < vertices.size(); v++) {
-		int randomIndex = (rand() % numColors * 3);
-		g_color_buffer_data[3 * v + 0] = colorData[randomIndex];
-		g_color_buffer_data[3 * v + 1] = colorData[randomIndex + 1];
-		g_color_buffer_data[3 * v + 2] = colorData[randomIndex + 2];
+		g_color_buffer_data[3 * v + 0] = dis(gen);
+		g_color_buffer_data[3 * v + 1] = dis(gen);
+		g_color_buffer_data[3 * v + 2] = dis(gen);
 	}
 
 	GLuint colorbuffer;
