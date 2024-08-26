@@ -48,6 +48,7 @@ void loadOBJ(
 		}
 		else if (line.substr(0,2) == "f ") {
 			std::istringstream iss(line.substr(2));
+			std::vector<unsigned int> faceVertexIndices;
 			std::string vertexDef;
 
 			while(iss >> vertexDef) {
@@ -56,7 +57,7 @@ void loadOBJ(
 
 				std::istringstream vertexStream(vertexDef);
 				if (vertexStream >> vIndex) {
-					vertexIndices.push_back(vIndex);
+					faceVertexIndices.push_back(vIndex);
 					if (vertexStream.peek() == '/') {
 						vertexStream.get(separator);
 						if (vertexStream.peek() != '/') {
@@ -78,6 +79,15 @@ void loadOBJ(
 				} else {
 					throw std::runtime_error(std::string("Wrong face format: ") + vertexDef);
 				}
+			}
+			if (faceVertexIndices.size() >= 3) {
+        		for (size_t i = 1; i < faceVertexIndices.size() - 1; ++i) {
+            		vertexIndices.push_back(faceVertexIndices[0]);
+            		vertexIndices.push_back(faceVertexIndices[i]);
+            		vertexIndices.push_back(faceVertexIndices[i + 1]);
+					}
+			} else {
+				throw std::runtime_error("Face format does not have enough vertices: " + line);
 			}
 		}
 		else {

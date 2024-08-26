@@ -6,8 +6,13 @@
 #include "vec4.hpp"
 #include "controls.hpp"
 #include "objLoader.hpp"
+#include "colordata.hpp"
+#include <cstdlib>
+#include <ctime>
 
 int main() {
+
+	std::srand(static_cast<unsigned int>(std::time(nullptr)));
 
 	// Initialize GLFW
 	if (!glfwInit()) {
@@ -73,17 +78,26 @@ int main() {
 	std::vector<Vec3> vertices;
 	std::vector<Vec2> uvs;
 	std::vector<Vec3> normals;
-	loadOBJ("./3DObj/cubeTuto.obj", vertices, uvs, normals);
+	loadOBJ("./3DObj/42.obj", vertices, uvs, normals);
 
 	GLuint vertexbuffer;
 	glGenBuffers(1, &vertexbuffer);
 	glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
 	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(Vec3), &vertices[0], GL_STATIC_DRAW);
 
-	// GLuint colorbuffer;
-	// glGenBuffers(1, &colorbuffer);
-	// glBindBuffer(GL_ARRAY_BUFFER, colorbuffer);
-	// glBufferData(GL_ARRAY_BUFFER, sizeof(g_color_buffer_data), g_color_buffer_data, GL_STATIC_DRAW);
+	GLfloat g_color_buffer_data[vertices.size() * 3];
+	int numColors = sizeof(colorData) / sizeof(colorData[0] / 3);
+	for (unsigned int v = 0; v < vertices.size(); v++) {
+		int randomIndex = (rand() % numColors * 3);
+		g_color_buffer_data[3 * v + 0] = colorData[randomIndex];
+		g_color_buffer_data[3 * v + 1] = colorData[randomIndex + 1];
+		g_color_buffer_data[3 * v + 2] = colorData[randomIndex + 2];
+	}
+
+	GLuint colorbuffer;
+	glGenBuffers(1, &colorbuffer);
+	glBindBuffer(GL_ARRAY_BUFFER, colorbuffer);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(g_color_buffer_data), g_color_buffer_data, GL_STATIC_DRAW);
 	
 	while (glfwGetKey(window, GLFW_KEY_ESCAPE) != GLFW_PRESS && glfwWindowShouldClose(window) == 0) {
 
@@ -108,14 +122,14 @@ int main() {
 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
 
 		// Colors
-		// glEnableVertexAttribArray(1);
-		// glBindBuffer(GL_ARRAY_BUFFER, colorbuffer);
-		// glVertexAttribPointer(1,3,GL_FLOAT,GL_FALSE,0,(void*)0);
+		glEnableVertexAttribArray(1);
+		glBindBuffer(GL_ARRAY_BUFFER, colorbuffer);
+		glVertexAttribPointer(1,3,GL_FLOAT,GL_FALSE,0,(void*)0);
 
 		// Draw the triangle
 		glDrawArrays(GL_TRIANGLES, 0, vertices.size());
 		glDisableVertexAttribArray(0);
-		// glDisableVertexAttribArray(1);
+		glDisableVertexAttribArray(1);
 
 		// Swap buffers
 		glfwSwapBuffers(window);
@@ -125,7 +139,7 @@ int main() {
 	// Cleanup
 	glfwDestroyWindow(window);
 	glDeleteBuffers(1, &vertexbuffer);
-	// glDeleteBuffers(1, &colorbuffer);
+	glDeleteBuffers(1, &colorbuffer);
 	glDeleteVertexArrays(1, &VertexArrayID);
 	glDeleteProgram(programID);
 
