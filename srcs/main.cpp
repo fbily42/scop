@@ -6,9 +6,18 @@
 #include "vec4.hpp"
 #include "controls.hpp"
 #include "objLoader.hpp"
+#include "texture.hpp"
 #include <random>
 
-int main() {
+int main(int argc, char *argv[]) {
+
+	float rotationAngle = 0.0f;
+	bool useTexture = false;
+
+	if (argc != 2) {
+		std::cerr << RED << "Use: ./scop <path_to_3D_object>" << RESET << std::endl;
+		return -1;
+	}
 
 	// Initialize GLFW
 	if (!glfwInit()) {
@@ -71,15 +80,26 @@ int main() {
 	// Identity matrix for model
 	Mat4 Model;
 
+	// Load texture
+	GLuint Texture = loadBMP("./texture/unicornTexture.bmp");
+	GLuint useTextureID = glGetUniformLocation(programID, "useTexture");
+	GLuint textureID = glGetUniformLocation(programID, "textureSampler");
+
+	// Read .obj file
 	std::vector<Vec3> vertices;
 	std::vector<Vec2> uvs;
 	std::vector<Vec3> normals;
-	loadOBJ("./3DObj/teapot.obj", vertices, uvs, normals);
+	loadOBJ(argv[1], vertices, uvs, normals);
 
 	GLuint vertexbuffer;
 	glGenBuffers(1, &vertexbuffer);
 	glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
 	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(Vec3), &vertices[0], GL_STATIC_DRAW);
+
+	GLuint uvbuffer;
+	glGenBuffers(1, &uvbuffer);
+	glBindBuffer(GL_ARRAY_BUFFER, uvbuffer);
+	glBufferData(GL_ARRAY_BUFFER, uvs.size() * sizeof(Vec2), &uvs[0], GL_STATIC_DRAW);
 
 	// Generate random colors
 	GLfloat g_color_buffer_data[vertices.size() * 3];
@@ -99,6 +119,12 @@ int main() {
 	
 	while (glfwGetKey(window, GLFW_KEY_ESCAPE) != GLFW_PRESS && glfwWindowShouldClose(window) == 0) {
 
+		// Switch between colors and texture
+		if (glfwGetKey(window, GLFW_KEY_T) == GLFW_PRESS) {
+			useTexture = !useTexture;
+			glfwWaitEventsTimeout(0.1);
+		}
+
 		// Clear the screen
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -109,10 +135,22 @@ int main() {
 		computeMatricesFromInputs(window, 1024, 768);
 		Mat4 Projection = getProjectionMatrix();
 		Mat4 View = getViewMatrix();
+
+		//Rotate on itself
+		rotationAngle += 0.5f;
+		Model = Model.rotate(rotationAngle, Vec3(0.0f,1.0f,0.0f));
+
 		Mat4 MVP = Projection * View * Model;
 
 		// Send our transformation to the currently bound shader, in MVP uniform
 		glUniformMatrix4fv(MatrixID, 1, GL_FALSE, MVP.getFirstElement());
+
+		glUniform1i(useTextureID, useTexture);
+		if (useTexture) {
+			glActiveTexture(GL_TEXTURE0);
+			glBindTexture(GL_TEXTURE_2D, Texture);
+			glUniform1i(textureID, 0);
+		}
 
 		// Attribute buffer
 		glEnableVertexAttribArray(0);
@@ -124,10 +162,16 @@ int main() {
 		glBindBuffer(GL_ARRAY_BUFFER, colorbuffer);
 		glVertexAttribPointer(1,3,GL_FLOAT,GL_FALSE,0,(void*)0);
 
+		// UVs
+		glEnableVertexAttribArray(2);
+		glBindBuffer(GL_ARRAY_BUFFER, uvbuffer);
+		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, (void*)0);
+
 		// Draw the triangle
 		glDrawArrays(GL_TRIANGLES, 0, vertices.size());
 		glDisableVertexAttribArray(0);
 		glDisableVertexAttribArray(1);
+		glDisableVertexAttribArray(2);
 
 		// Swap buffers
 		glfwSwapBuffers(window);
@@ -138,7 +182,9 @@ int main() {
 	glfwDestroyWindow(window);
 	glDeleteBuffers(1, &vertexbuffer);
 	glDeleteBuffers(1, &colorbuffer);
+	glDeleteBuffers(1, &uvbuffer);
 	glDeleteVertexArrays(1, &VertexArrayID);
+	glDeleteTextures(1, &Texture);
 	glDeleteProgram(programID);
 
 	//Close OpenGL window and terminate GLFW

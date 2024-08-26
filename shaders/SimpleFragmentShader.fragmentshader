@@ -1,7 +1,17 @@
 #version 330 core
+
 in vec3 fragmentColor;
+in vec2 UV;
+
 out vec3 color;
 
+uniform sampler2D textureSampler;
+uniform bool useTexture;
+
 void main(){
-  color = fragmentColor;
+	if (useTexture) {
+		color = texture(textureSampler, UV).rgb;
+	} else {
+  		color = fragmentColor;
+	}
 }

@@ -115,6 +115,9 @@ void loadOBJ(
 			out_normals.push_back(normal);
 		}
 	}
+	if (out_uvs.empty()) {
+		out_uvs.resize(temp_vertices.size(), Vec2(0.2f,0.7f));
+	}
 	file.close();
 	return ;
 }

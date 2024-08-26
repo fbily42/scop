@@ -6,7 +6,7 @@
 #    By: fbily <fbily@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/04 18:02:09 by fbily             #+#    #+#              #
-#    Updated: 2024/08/23 18:28:57 by fbily            ###   ########.fr        #
+#    Updated: 2024/08/26 15:15:03 by fbily            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,6 +25,7 @@ SRCS_NAME	=	main.cpp \
 				mat4.cpp \
 				controls.cpp \
 				objLoader.cpp \
+				texture.cpp \
 				
 SRCS		=	$(addprefix $(SRCS_DIR), $(SRCS_NAME))
 

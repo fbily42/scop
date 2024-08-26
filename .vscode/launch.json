@@ -7,6 +7,7 @@
             "request": "launch",
             "program": "${workspaceFolder}/scop", // Path to your compiled executable
             "cwd": "${workspaceFolder}",
+			"args": ["./3DObj/42.obj"],
             "stopAtEntry": false,
             "preLaunchTask": "build",
             "externalConsole": false,
