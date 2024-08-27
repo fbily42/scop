@@ -62,8 +62,6 @@ void computeMatricesFromInputs(GLFWwindow* window, float width, float height) {
 		position -= right * deltaTime * speed;
 	}
 
-	// float FoV = initialFoV - 5 * glfwGetMouseWheel();
-
 	ProjectionMatrix = Mat4::perspective(initialFoV, width / height, 0.1f, 100.0f);
 
 	ViewMatrix = Mat4::lookAt(
