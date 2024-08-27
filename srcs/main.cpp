@@ -8,11 +8,14 @@
 #include "objLoader.hpp"
 #include "texture.hpp"
 #include <random>
+#include <algorithm>
 
 int main(int argc, char *argv[]) {
 
 	float rotationAngle = 0.0f;
+	float blendFactor = 0.0f;
 	bool useTexture = false;
+	bool keyPressed = false;
 
 	if (argc != 2) {
 		std::cerr << RED << "Use: ./scop <path_to_3D_object>" << RESET << std::endl;
@@ -82,7 +85,7 @@ int main(int argc, char *argv[]) {
 
 	// Load texture
 	GLuint Texture = loadBMP("./texture/unicornTexture.bmp");
-	GLuint useTextureID = glGetUniformLocation(programID, "useTexture");
+	GLuint blendFactorID = glGetUniformLocation(programID, "blendFactor");
 	GLuint textureID = glGetUniformLocation(programID, "textureSampler");
 
 	// Read .obj file
@@ -120,10 +123,21 @@ int main(int argc, char *argv[]) {
 	while (glfwGetKey(window, GLFW_KEY_ESCAPE) != GLFW_PRESS && glfwWindowShouldClose(window) == 0) {
 
 		// Switch between colors and texture
-		if (glfwGetKey(window, GLFW_KEY_T) == GLFW_PRESS) {
+		if (glfwGetKey(window, GLFW_KEY_T) == GLFW_PRESS && !keyPressed) {
 			useTexture = !useTexture;
-			glfwWaitEventsTimeout(0.1);
+			keyPressed = true;
 		}
+
+		if (glfwGetKey(window, GLFW_KEY_T) == GLFW_RELEASE) {
+        	keyPressed = false;
+		}
+
+		if (useTexture && blendFactor < 1.0f) {
+			blendFactor += 0.1f;
+		} else if (!useTexture && blendFactor > 0.0f) {
+			blendFactor -= 0.1f;
+		}
+		blendFactor = std::clamp(blendFactor, 0.0f, 1.0f);
 
 		// Clear the screen
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -137,7 +151,7 @@ int main(int argc, char *argv[]) {
 		Mat4 View = getViewMatrix();
 
 		//Rotate on itself
-		rotationAngle += 0.5f;
+		rotationAngle += 0.2f;
 		Model = Model.rotate(rotationAngle, Vec3(0.0f,1.0f,0.0f));
 
 		Mat4 MVP = Projection * View * Model;
@@ -145,8 +159,8 @@ int main(int argc, char *argv[]) {
 		// Send our transformation to the currently bound shader, in MVP uniform
 		glUniformMatrix4fv(MatrixID, 1, GL_FALSE, MVP.getFirstElement());
 
-		glUniform1i(useTextureID, useTexture);
-		if (useTexture) {
+		glUniform1f(blendFactorID, blendFactor);
+		if (useTexture || blendFactor > 0.0f) {
 			glActiveTexture(GL_TEXTURE0);
 			glBindTexture(GL_TEXTURE_2D, Texture);
 			glUniform1i(textureID, 0);

@@ -116,7 +116,14 @@ void loadOBJ(
 		}
 	}
 	if (out_uvs.empty()) {
-		out_uvs.resize(temp_vertices.size(), Vec2(0.2f,0.7f));
+		std::vector<Vec2> fixedUVs = {
+        	Vec2(0.0f, 0.0f),
+        	Vec2(1.0f, 0.0f),
+        	Vec2(0.5f, 1.0f)
+    	};
+		for (size_t i = 0; i < out_vertices.size(); ++i) {
+        	out_uvs.push_back(fixedUVs[i % 3]);
+   		}
 	}
 	file.close();
 	return ;

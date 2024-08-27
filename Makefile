@@ -6,13 +6,13 @@
 #    By: fbily <fbily@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/04 18:02:09 by fbily             #+#    #+#              #
-#    Updated: 2024/08/26 15:15:03 by fbily            ###   ########.fr        #
+#    Updated: 2024/08/27 12:58:37 by fbily            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 
 CC = c++
-CXXFLAGS = -Wall -Wextra -Werror -MMD -g3
+CXXFLAGS = -Wall -Wextra -Werror -MMD -g3 -std=c++17
 
 NAME = scop
 
