@@ -56,6 +56,10 @@ Vec3 Vec3::operator*(float scalar) const {
 	return (Vec3(_x * scalar, _y * scalar, _z * scalar));
 }
 
+Vec3 Vec3::operator/(float scalar) const {
+	return (Vec3(_x / scalar, _y / scalar, _z / scalar));
+}
+
 Vec3& Vec3::operator+=(const Vec3& rhs) {
 	this->_x += rhs._x;
 	this->_y += rhs._y;
@@ -68,6 +72,10 @@ Vec3& Vec3::operator-=(const Vec3& rhs) {
 	this->_y -= rhs._y;
 	this->_z -= rhs._z;
 	return *this;
+}
+
+Vec3 Vec3::operator-() const {
+	return Vec3(-this->_x, -this->_y, -this->_z);
 }
 
 std::ostream& Vec3::operator<<(std::ostream& os) const {
@@ -97,4 +105,13 @@ Vec3 Vec3::normalize() const {
 		throw std::runtime_error("Cannot normalize a vector with magnitude 0.");
 	}
 	return (Vec3(_x / mag, _y / mag, _z / mag));
+}
+
+Vec3	Vec3::computeCentroid(const std::vector<Vec3>& vertices) {
+	Vec3 centroid(0.0f, 0.0f, 0.0f);
+	for (const Vec3& vertex: vertices) {
+		centroid += vertex;
+	}
+	centroid = centroid / static_cast<float>(vertices.size());
+	return centroid;
 }

@@ -127,15 +127,15 @@ int main(int argc, char *argv[]) {
 			useTexture = !useTexture;
 			keyPressed = true;
 		}
-
 		if (glfwGetKey(window, GLFW_KEY_T) == GLFW_RELEASE) {
         	keyPressed = false;
 		}
 
+		// Used for smoother transition between colors and texture
 		if (useTexture && blendFactor < 1.0f) {
-			blendFactor += 0.1f;
+			blendFactor += 0.01f;
 		} else if (!useTexture && blendFactor > 0.0f) {
-			blendFactor -= 0.1f;
+			blendFactor -= 0.01f;
 		}
 		blendFactor = std::clamp(blendFactor, 0.0f, 1.0f);
 
@@ -152,8 +152,8 @@ int main(int argc, char *argv[]) {
 
 		//Rotate on itself
 		rotationAngle += 0.2f;
-		Model = Model.rotate(rotationAngle, Vec3(0.0f,1.0f,0.0f));
-
+		Model = Model.transformObject(vertices, rotationAngle, Vec3(0.0f,1.0f,0.0f));
+		
 		Mat4 MVP = Projection * View * Model;
 
 		// Send our transformation to the currently bound shader, in MVP uniform

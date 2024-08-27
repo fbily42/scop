@@ -5,6 +5,7 @@
 #include <cmath>
 #include <stdexcept>
 #include <iostream>
+#include <vector>
 
 class Vec3
 {
@@ -31,14 +32,17 @@ class Vec3
 		Vec3	operator-(const Vec3& rhs) const;
 		Vec3	operator+(const Vec3& rhs) const;
 		Vec3	operator*(float scalar) const;
+		Vec3	operator/(float scalar) const;
 		Vec3&	operator+=(const Vec3& rhs);
 		Vec3&	operator-=(const Vec3& rhs);
-
+		Vec3	operator-() const;
 
 		float	dot(const Vec3& v) const;
 		Vec3	cross(const Vec3& v) const;
 		float	magnitude() const;
 		Vec3	normalize() const;
+
+		static Vec3	computeCentroid(const std::vector<Vec3>& vertices);
 
 		std::ostream& operator<<(std::ostream& os) const;
 };

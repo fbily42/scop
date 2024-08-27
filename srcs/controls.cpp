@@ -14,7 +14,7 @@ Mat4 getProjectionMatrix() {
 Vec3 position(0,0,5);
 float horizontalAngle = 3.14f;
 float verticalAngle = 0.0f;
-float initialFoV = 45.0f;
+float initialFoV = 90.0f;
 float speed = 3.0f;
 float mouseSpeed = 0.005f;
 
@@ -64,7 +64,7 @@ void computeMatricesFromInputs(GLFWwindow* window, float width, float height) {
 
 	// float FoV = initialFoV - 5 * glfwGetMouseWheel();
 
-	ProjectionMatrix = Mat4::perspective(initialFoV, 4.0f / 3.0f, 0.1f, 100.0f);
+	ProjectionMatrix = Mat4::perspective(initialFoV, width / height, 0.1f, 100.0f);
 
 	ViewMatrix = Mat4::lookAt(
 		position,
