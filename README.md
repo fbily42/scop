@@ -58,17 +58,14 @@ Here are some demonstrations of the program in action:
 ```bash
 ./scop ./3Dobj/42.obj
 ```
-
-INSERT GIF 42
+![42 Demo](./demo/42.gif)
 
 ```bash
 ./scop ./3Dobj/suzanne.obj
 ```
-
-INSERT GIF suzanne
+![Suzanne Demo](./demo/suzanne.gif)
 
 ```bash
 ./scop ./3Dobj/Porsche_911_GT2.obj
 ```
-
-INSERT GIF Porsche
+![Porsche Demo](./demo/porsche.gif)
